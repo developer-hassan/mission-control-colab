@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoopy Doo Mission Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-logo-section">
+                    <img src="images/scoopy-logo.png" alt="Scoopy Doo Logo" class="header-logo">
+                    <h1>Scoopy Doo Mission Control</h1>
+                </div>
+                <div class="header-meta">
+                    <span id="current-time"></span>
+                    <span id="system-status" class="status-badge"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="nav-section">
+                <button class="nav-item active" data-view="overview">
+                    📊 Executive Overview
+                </button>
+                <button class="nav-item" data-view="agents">
+                    ⚙️ Agent Control Center
+                </button>
+                <button class="nav-item" data-view="ads">
+                    📢 Ads Performance
+                </button>
+                <button class="nav-item" data-view="leads">
+                    📝 Lead Flow
+                </button>
+                <button class="nav-item" data-view="jobber">
+                    📅 Operations (Jobber)
+                </button>
+            </div>
+            <div class="nav-section">
+                <button class="nav-item" data-view="integrations">
+                    🔗 Integrations
+                </button>
+                <button class="nav-item" data-view="health">
+                    💚 System Health
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="view-section active">
+                <h2>Executive Dashboard</h2>
+                <div id="overview-loading" class="loading">Loading overview...</div>
+                <div id="overview-content" style="display:none;">
+                    <!-- Financial Metrics Row -->
+                    <div class="metrics-row">
+                        <div class="metric-card large">
+                            <h3>Total Revenue</h3>
+                            <div class="metric-value" id="total-revenue">$0</div>
+                            <div class="metric-subtitle">This Month</div>
+                        </div>
+                        <div class="metric-card large">
+                            <h3>Profit Margin</h3>
+                            <div class="gauge-container">
+                                <canvas id="profitGauge" width="120" height="120"></canvas>
+                            </div>
+                        </div>
+                        <div class="metric-card large">
+                            <h3>Avg Job Value</h3>
+                            <div class="metric-value" id="avg-job-value">$0</div>
+                            <div class="metric-subtitle">Per Service</div>
+                        </div>
+                        <div class="metric-card large">
+                            <h3>Completion Rate</h3>
+                            <div class="gauge-container">
+                                <canvas id="completionGauge" width="120" height="120"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <h3>Revenue by Service Type</h3>
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Customer Distribution</h3>
+                            <canvas id="customerChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Lead Sources</h3>
+                            <canvas id="leadsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Alerts & Tasks Row -->
+                    <div class="alerts-row">
+                        <div class="section-card">
+                            <h3>⚠️ Alerts</h3>
+                            <div id="alerts-section"></div>
+                        </div>
+                        <div class="section-card">
+                            <h3>📋 Top Tasks</h3>
+                            <div id="tasks-section"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Agent Control Center Section -->
+            <section id="agents" class="view-section">
+                <h2>Agent Control Center</h2>
+                <div id="agents-loading" class="loading">Loading agent data...</div>
+                <div id="agents-content" style="display:none;">
+                    <div class="agents-summary" id="agents-summary"></div>
+                    <div class="agents-grid" id="agents-grid"></div>
+                    <div class="agent-issues" id="agent-issues"></div>
+                </div>
+            </section>
+
+            <!-- Ads Performance Section -->
+            <section id="ads" class="view-section">
+                <h2>Ads Performance Dashboard</h2>
+                <div id="ads-loading" class="loading">Loading ads data...</div>
+                <div id="ads-content" style="display:none;">
+                    <div class="ads-summary" id="ads-summary"></div>
+                    <div class="ads-platforms" id="ads-platforms"></div>
+                    <div class="ads-recommendations" id="ads-recommendations"></div>
+                </div>
+            </section>
+
+            <!-- Leads Section -->
+            <section id="leads" class="view-section">
+                <h2>Lead Flow & Sales Funnel</h2>
+                <div id="leads-loading" class="loading">Loading lead data...</div>
+                <div id="leads-content" style="display:none;">
+
+                    <!-- Key Metrics Row -->
+                    <div class="metrics-row">
+                        <div class="metric-card">
+                            <h3>Total Leads</h3>
+                            <div class="metric-value" id="total-leads">0</div>
+                            <div class="metric-subtitle">This Month</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Conversion Rate</h3>
+                            <div class="metric-value" id="conversion-rate">0%</div>
+                            <div class="metric-subtitle">Leads → Jobs</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Avg Response Time</h3>
+                            <div class="metric-value" id="response-time">0h</div>
+                            <div class="metric-subtitle">To First Contact</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Close Rate</h3>
+                            <div class="metric-value" id="close-rate">0%</div>
+                            <div class="metric-subtitle">Quotes → Jobs</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-row">
+                        <!-- Funnel Chart -->
+                        <div class="chart-card">
+                            <h3>📊 Sales Funnel</h3>
+                            <canvas id="funnelChart"></canvas>
+                        </div>
+
+                        <!-- Lead Sources -->
+                        <div class="chart-card">
+                            <h3>🎯 Lead Sources</h3>
+                            <canvas id="leadSourcesChart"></canvas>
+                        </div>
+
+                        <!-- Lead Status -->
+                        <div class="chart-card">
+                            <h3>📈 Lead Status Breakdown</h3>
+                            <canvas id="leadStatusChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Leads Table -->
+                    <div class="section-card" style="margin-top: 20px;">
+                        <h3>📋 Recent Leads</h3>
+                        <div id="recent-leads-container" style="overflow-x: auto;">
+                            <table class="leads-table" id="leads-table">
+                                <thead>
+                                    <tr>
+                                        <th>Lead Name</th>
+                                        <th>Source</th>
+                                        <th>Status</th>
+                                        <th>Days Open</th>
+                                        <th>Follow-up</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leads-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Jobber Operations -->
+            <section id="jobber" class="view-section">
+                <h2>Operations & Scheduling</h2>
+                <div id="jobber-loading" class="loading">Loading Jobber data...</div>
+                <div id="jobber-content" style="display:none;">
+                    <div class="jobber-status" id="jobber-status"></div>
+                    <div class="jobber-data" id="jobber-data"></div>
+                </div>
+            </section>
+
+            <!-- Integrations Section -->
+            <section id="integrations" class="view-section">
+                <h2>Integrations</h2>
+                <div id="integrations-loading" class="loading">Loading integrations...</div>
+                <div id="integrations-content" style="display:none;">
+                    <div id="integrations-grid"></div>
+                </div>
+            </section>
+
+            <!-- Health Section -->
+            <section id="health" class="view-section">
+                <h2>System Health</h2>
+                <div id="health-loading" class="loading">Loading health data...</div>
+                <div id="health-content" style="display:none;">
+                    <div class="health-score" id="health-score"></div>
+                    <div class="services-grid" id="services-grid"></div>
+                    <div class="performance-metrics" id="performance-metrics"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
